@@ -9,30 +9,30 @@
 LIBS=-pthread
 CC=gcc
 CFLAGS=-Wall -Werror
-SOURCES=src/*.c
-OBJECTS=bin/process.o
-TARGET=bin/process
+PSOURCES=src/poster.c
+POBJECTS=bin/poster.o
+PTARGET=bin/poster
 
-all: build process
+WSOURCES=src/waiter.c
+WOBJECTS=bin/waiter.o
+WTARGET=bin/waiter
+
+all: build waiter poster
 
 build:
 	mkdir -p bin
 
-process: process.o
-	$(CC) $(LIBS) $(FLAGS) $(OBJECTS) -o $(TARGET)
+waiter: waiter.o
+	$(CC) $(LIBS) $(FLAGS) $(WOBJECTS) -o $(WTARGET)
 
-process.o:
-	$(CC) $(LIBS) $(FLAGS) -c $(SOURCES) -o $(OBJECTS)
+waiter.o: build
+	$(CC) $(LIBS) $(FLAGS) -c $(WSOURCES) -o $(WOBJECTS)
+
+poster: poster.o
+	$(CC) $(LIBS) $(FLAGS) $(POBJECTS) -o $(PTARGET)
+
+poster.o: build
+	$(CC) $(LIBS) $(FLAGS) -c $(PSOURCES) -o $(POBJECTS)
 
 clean:
 	rm -r bin
-
-# blah: blah.o
-# 	cc blah.o -o blah # Runs third
-
-# blah.o: blah.c
-# 	cc -c blah.c -o blah.o # Runs second
-
-# # Typically blah.c would already exist, but I want to limit any additional required files
-# blah.c:
-# 	echo "int main() { return 0; }" > blah.c # Runs first
